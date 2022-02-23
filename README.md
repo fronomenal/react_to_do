@@ -1,3 +1,3 @@
 # Basic React App
 
-> Simple To Do app to in react.
+> Simple To Do app in react.
