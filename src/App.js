@@ -1,9 +1,18 @@
 import Header from './components/Header.js';
 import Tasks from './components/Tasks.js';
+import TaskForm from './components/TaskForm.js';
 import {useState} from 'react';
 
 function App() {
   const [tasks, setTasks] = useState(taskState);
+  const [formPresence, toggleForm] = useState(false);
+
+  const addTask = (task) => {
+    const id = tasks.length + 1;
+
+    setTasks([...tasks, {id, ...task}]);
+
+  }
 
   const clearTask = (id)=> {
     setTasks(tasks.filter( (task)=> task.id !== id));
@@ -15,7 +24,8 @@ function App() {
 
   return (
     <div className="container">
-      <Header text="Task Tracker App" />
+      <Header text="Task Tracker App" formTogg={toggleForm} formState={formPresence} />
+      {formPresence && <TaskForm addFunc={addTask} />}
       { (tasks.length === 0 )? <p>Please Add a task to track</p> : 
       <Tasks state={tasks} clearFunc={clearTask} remTogg={reminderToggle} /> }
     </div>

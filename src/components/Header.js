@@ -4,7 +4,7 @@ const Header = (props)=> {
     return (
         <header className="header">
             <h1>{props.text}</h1>
-            <Button click={btnClick} color="green" text="Add"/>
+            <Button click={ ()=> props.formTogg(!props.formState) } color="green" text={ (props.formState)? "Close" : "Add"} />
         </header>
     );
 }
@@ -13,8 +13,5 @@ Header.defaultProps = {
     text: "Task Tracker"
 }
 
-function btnClick(e){
-    alert("Clicked a " + e.target)
-}
 
 export default Header;
