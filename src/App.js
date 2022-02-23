@@ -10,7 +10,7 @@ function App() {
   const [formPresence, toggleForm] = useState(false);
 
   useEffect( ()=>{
-  const db = JSON.parse(localStorage.getItem(db_key, JSON.stringify(tasks)));
+  const db = JSON.parse(localStorage.getItem(db_key));
   db && setTasks(db);
   }, [])
 
