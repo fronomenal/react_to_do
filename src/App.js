@@ -1,11 +1,18 @@
 import Header from './components/Header.js';
 import Tasks from './components/Tasks.js';
 import TaskForm from './components/TaskForm.js';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+
+const db_key = "tta.tasks"
 
 function App() {
   const [tasks, setTasks] = useState(taskState);
   const [formPresence, toggleForm] = useState(false);
+
+  useEffect( ()=>{
+  const db = JSON.parse(localStorage.getItem(db_key, JSON.stringify(tasks)));
+  db && setTasks(db);
+  }, [])
 
   const addTask = (task) => {
     const id = tasks.length + 1;
@@ -21,6 +28,10 @@ function App() {
   const reminderToggle = (id)=> {
     setTasks(tasks.map( (task)=> (task.id === id)? {...task, rem: !task.rem} : task ))
   }
+
+  useEffect( ()=>
+    localStorage.setItem(db_key, JSON.stringify(tasks)) 
+  , [tasks]);
 
   return (
     <div className="container">
