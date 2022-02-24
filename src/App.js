@@ -3,25 +3,33 @@ import Tasks from './components/Tasks.js';
 import TaskForm from './components/TaskForm.js';
 import {useState, useEffect} from 'react';
 
-const db_key = "tta.tasks"
-
 function App() {
-  const [tasks, setTasks] = useState(taskState);
+  const [tasks, setTasks] = useState([]);
   const [formPresence, toggleForm] = useState(false);
 
   useEffect( ()=>{
-  const db = JSON.parse(localStorage.getItem(db_key, JSON.stringify(tasks)));
-  db && setTasks(db);
+
+    const getTasks = async ()=>{
+      const dbTasks = await fetchTasks();
+      setTasks(dbTasks);
+    }
+
+    getTasks();
+
   }, [])
 
-  const addTask = (task) => {
-    const id = tasks.length + 1;
+  const addTask = async (task) => {
+    const res = await fetch("http://localhost:5050/tasks/",{method: 'POST', headers: {"Content-Type": "Application/json"}, body: JSON.stringify(task)});
+    
+    const body = await res.json();
 
-    setTasks([...tasks, {id, ...task}]);
+    setTasks([...tasks, body]);
 
   }
 
-  const clearTask = (id)=> {
+  const clearTask = async (id)=> {
+    await fetch(`http://localhost:5050/tasks/${id}`,{method: 'DELETE'});
+
     setTasks(tasks.filter( (task)=> task.id !== id));
   }
 
@@ -29,9 +37,9 @@ function App() {
     setTasks(tasks.map( (task)=> (task.id === id)? {...task, rem: !task.rem} : task ))
   }
 
-  useEffect( ()=>
-    localStorage.setItem(db_key, JSON.stringify(tasks)) 
-  , [tasks]);
+  // useEffect( ()=>
+  //   localStorage.setItem(db_key, JSON.stringify(tasks)) 
+  // , [tasks]);
 
   return (
     <div className="container">
@@ -41,12 +49,15 @@ function App() {
       <Tasks state={tasks} clearFunc={clearTask} remTogg={reminderToggle} /> }
     </div>
   );
-
   
 }
-const taskState = [
-  {id: 1, text: "Drs App", day: "05/02/2022 14:30", rem: true},
-  {id: 2, text: "Meet Cute", day: "06/02/2022 10:30", rem: true}
-];
+
+async function fetchTasks() {
+  const res = await fetch("http://localhost:5050/tasks");
+  console.log(res);
+  const body = await res.json();
+
+  return body;
+}
 
 export default App;
