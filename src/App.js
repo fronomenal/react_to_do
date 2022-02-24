@@ -33,8 +33,11 @@ function App() {
     setTasks(tasks.filter( (task)=> task.id !== id));
   }
 
-  const reminderToggle = (id)=> {
-    setTasks(tasks.map( (task)=> (task.id === id)? {...task, rem: !task.rem} : task ))
+  const reminderToggle = async (id)=> {
+    const remTask = tasks.map( (task)=> (task.id === id)? {...task, rem: !task.rem} : task )
+    setTasks(remTask);
+    const task = remTask.find( (task)=> task.id === id );
+    await fetch(`http://localhost:5050/tasks/${id}`, {method: 'PUT', headers: {"Content-Type": "Application/json"}, body: JSON.stringify(task)});
   }
 
   // useEffect( ()=>
@@ -54,7 +57,6 @@ function App() {
 
 async function fetchTasks() {
   const res = await fetch("http://localhost:5050/tasks");
-  console.log(res);
   const body = await res.json();
 
   return body;
