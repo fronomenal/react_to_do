@@ -1,10 +1,13 @@
 import Button from './Button.js'
+import {useLocation} from "react-router-dom";
 
 const Header = (props)=> {
+    const path = useLocation();
+
     return (
         <header className="header">
             <h1>{props.text}</h1>
-            <Button click={ ()=> props.formTogg(!props.formState) } color="green" text={ (props.formState)? "Close" : "Add"} />
+        {(path.pathname === "/") && <Button click={ ()=> props.formTogg(!props.formState) } color="green" text={ (props.formState)? "Close" : "Add"} />}
         </header>
     );
 }

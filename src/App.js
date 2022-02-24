@@ -1,7 +1,11 @@
 import Header from './components/Header.js';
 import Tasks from './components/Tasks.js';
 import TaskForm from './components/TaskForm.js';
+import Footer from './components/Footer.js';
+import About from './components/About.js';
+
 import {useState, useEffect} from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -45,12 +49,22 @@ function App() {
   // , [tasks]);
 
   return (
-    <div className="container">
-      <Header text="Task Tracker App" formTogg={toggleForm} formState={formPresence} />
-      {formPresence && <TaskForm addFunc={addTask} />}
-      { (tasks.length === 0 )? <p>Please Add a task to track</p> : 
-      <Tasks state={tasks} clearFunc={clearTask} remTogg={reminderToggle} /> }
-    </div>
+    <Router>
+      <div className="container">
+        <Header text="Task Tracker App" formTogg={toggleForm} formState={formPresence} />
+        <Routes>
+          <Route path="/" exact element={(
+            <>
+            {formPresence && <TaskForm addFunc={addTask} />}
+            { (tasks.length === 0 )? <p>Please add a task to track</p> :
+            <Tasks state={tasks} clearFunc={clearTask} remTogg={reminderToggle} /> }
+            </>
+          ) } />
+          <Route path='/about' element={<About />} />
+        </Routes>
+        <Footer />
+      </div>
+    </Router>
   );
   
 }
