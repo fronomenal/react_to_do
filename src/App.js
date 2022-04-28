@@ -37,11 +37,11 @@ function App() {
     setTasks(tasks.filter( (task)=> task.id !== id));
   }
 
-  const reminderToggle = async (id)=> {
+  const reminderToggle = (id)=> {
     const remTask = tasks.map( (task)=> (task.id === id)? {...task, rem: !task.rem} : task )
     setTasks(remTask);
     const task = remTask.find( (task)=> task.id === id );
-    await fetch(`http://localhost:5050/tasks/${id}`, {method: 'PUT', headers: {"Content-Type": "Application/json"}, body: JSON.stringify(task)});
+   fetch(`http://localhost:5050/tasks/${id}`, {method: 'PUT', headers: {"Content-Type": "Application/json"}, body: JSON.stringify(task)});
   }
 
   // useEffect( ()=>
