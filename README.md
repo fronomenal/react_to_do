@@ -1,6 +1,6 @@
 # Basic React App
 
-Simple To Do app to check the functionalities of react.
+Simple To Do app in react.
 
 ## Technologies
 
